@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D-Groups Bible Study App | 1 Peter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       THEME: CSS Custom Properties
+       ============================================================ */
+    :root {
+      --bg: #F3F4F4;
+      --card: #FFFFFF;
+      --fg: #3A3A3C;
+      --fg2: #808285;
+      --pri: #9B1B34;
+      --pri-fg: #FFFFFF;
+      --sec: #F9F3F5;
+      --sec-fg: #3A3A3C;
+      --bor: #e5e5e5;
+      --shadow: rgba(0,0,0,0.08);
+      --prayer-bg: rgba(155,27,52,0.08);
+      --prayer-bor: rgba(155,27,52,0.15);
+      --cmt-bg: rgba(249,243,245,0.5);
+      --quote-bg: rgba(155,27,52,0.05);
+      --pill-count-bg: rgba(0,0,0,0.07);
+      --tab-bg: #eee;
+      --img-bg: #eee;
+    }
+    .dark {
+      --bg: #1a1a1a;
+      --card: #262626;
+      --fg: #f5f5f5;
+      --fg2: #a3a3a3;
+      --pri: #9B1B34;
+      --pri-fg: #FFFFFF;
+      --sec: #2d2d2d;
+      --sec-fg: #f5f5f5;
+      --bor: #404040;
+      --shadow: rgba(0,0,0,0.2);
+      --prayer-bg: rgba(155,27,52,0.15);
+      --prayer-bor: rgba(155,27,52,0.3);
+      --cmt-bg: rgba(45,45,45,0.5);
+      --quote-bg: rgba(155,27,52,0.08);
+      --pill-count-bg: rgba(255,255,255,0.1);
+      --tab-bg: #2d2d2d;
+      --img-bg: #1e1e1e;
+    }
+
+    /* ============================================================
+       BASE
+       ============================================================ */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+    ::selection { background: #9B1B34; color: white; }
+    button { font-family: 'Roboto', sans-serif; cursor: pointer; }
+    select { font-family: 'Roboto', sans-serif; }
+
+    /* ============================================================
+       HEADER
+       ============================================================ */
+    .header {
+      position: sticky; top: 0; z-index: 50;
+      background: var(--card);
+      border-bottom: 1px solid var(--bor);
+      box-shadow: 0 1px 3px var(--shadow);
+    }
+    .header-inner {
+      max-width: 768px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px;
+    }
+    .logo-d {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: #9B1B34;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .logo-d img { width: 100%; height: 100%; object-fit: cover; }
+    .header-center { text-align: center; }
+    .header-title { font-size: 16px; font-weight: 700; }
+    .header-sub { font-size: 15px; color: var(--fg2); font-weight: 500; }
+    .header-right { display: flex; align-items: center; gap: 8px; }
+    .theme-btn {
+      background: none; border: 1px solid var(--bor); border-radius: 20px;
+      height: 36px; padding: 0 12px; gap: 6px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--fg); font-size: 16px;
+    }
+    .eic-logo { height: 80px; display: none; }
+    @media (min-width: 640px) { .eic-logo { display: block; } }
+
+    /* ============================================================
+       PRAYER BANNER
+       ============================================================ */
+    .prayer {
+      background: var(--tab-bg);
+      border-bottom: 1px solid var(--bor);
+      padding: 18px 24px; text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+    }
+    .prayer p {
+      font-size: 18px; opacity: 0.85; font-style: italic;
+      margin: 0;
+    }
+    .prayer .icon {
+      width: 24px; height: 24px;
+    }
+
+    /* ============================================================
+       PASSAGE SELECTOR
+       ============================================================ */
+    .selector {
+      background: var(--prayer-bg);
+      border-bottom: 1px solid var(--bor);
+      padding: 30px 16px;
+    }
+    .selector-inner {
+      max-width: 768px; margin: 0 auto; text-align: center;
+    }
+    .selector h2 { font-size: 24px; font-weight: 600; margin-bottom: 20px; }
+    .selector-controls { display: flex; justify-content: center; gap: 24px; }
+    .selector-group { display: flex; align-items: center; gap: 10px; }
+    .selector-group label { font-size: 16px; color: var(--fg2); }
+    .selector-group select {
+      appearance: none;
+      padding: 10px 36px 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--bor);
+      background: var(--card);
+      color: var(--fg);
+      font-size: 18px; font-weight: 500;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23808285' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+    }
+    .selector-ref { font-size: 18px; color: var(--fg2); margin-top: 16px; font-weight: 500; }
+
+    /* ============================================================
+       CARDS (shared)
+       ============================================================ */
+    .main { max-width: 768px; margin: 0 auto; padding: 24px 16px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--bor);
+      border-radius: 10px;
+      margin-bottom: 24px;
+    }
+    .card-head { padding: 20px 20px 8px; }
+    .card-title {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 17px; font-weight: 700;
+    }
+    .card-title img { width: 20px; height: 20px; }
+    .card-sub { font-size: 13px; color: var(--fg2); margin-top: 4px; }
+    .card-body { padding: 12px 20px 20px; }
+
+    /* ============================================================
+       CONTEXT VIEW (Step 1)
+       ============================================================ */
+    .verse-row { padding: 8px 16px; line-height: 1.7; transition: all 0.2s; }
+    .verse-row.selected {
+      padding: 12px 16px;
+      border-left: 4px solid var(--pri);
+      background: var(--sec);
+      border-radius: 0 8px 8px 0;
+      font-weight: 500;
+    }
+    .verse-row:not(.selected) { border-left: 4px solid transparent; }
+    .verse-num {
+      font-weight: 700; font-size: 12px;
+      margin-right: 8px; color: var(--fg2);
+    }
+    .verse-row.selected .verse-num { color: var(--pri); }
+    .chapter-divider {
+      display: flex; align-items: center; gap: 8px;
+      padding: 4px 16px; margin: 4px 0;
+    }
+    .chapter-divider-line {
+      flex: 1; height: 2px;
+      background: var(--pri); opacity: 0.45;
+      border-radius: 2px;
+    }
+    .chapter-divider-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.2px;
+      text-transform: uppercase; color: var(--pri); opacity: 0.7;
+      white-space: nowrap;
+    }
+
+    /* ============================================================
+       EXPANDABLE SECTIONS
+       ============================================================ */
+    .expand-trigger {
+      display: flex; width: 100%; justify-content: space-between; align-items: center;
+      background: none; border: none; padding: 8px 0;
+      color: var(--fg2); font-size: 13px; font-weight: 500;
+      border-top: 1px solid var(--bor); margin-top: 16px; padding-top: 12px;
+    }
+    .expand-content {
+      margin-top: 8px; padding: 16px;
+      background: var(--sec); border-radius: 8px;
+      font-size: 14px; line-height: 1.75;
+      display: none;
+    }
+    .expand-content.open { display: block; }
+
+    /* ============================================================
+       TABS (Step 2)
+       ============================================================ */
+    .tabs {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px;
+      background: var(--tab-bg); border-radius: 8px; padding: 4px;
+      margin-bottom: 16px;
+    }
+    .tab-btn {
+      padding: 8px 4px; border-radius: 6px; border: none;
+      font-size: 12px; font-weight: 400;
+      background: transparent; color: var(--fg2);
+    }
+    .tab-btn.active {
+      background: var(--card); color: var(--fg);
+      font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* ============================================================
+       PILLS (Step 2)
+       ============================================================ */
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; min-height: 48px; }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      border-radius: 20px; border: none;
+      font-weight: 500; text-transform: capitalize;
+      background: var(--sec); color: var(--sec-fg);
+      transition: all 0.15s;
+    }
+    .pill.clickable { cursor: pointer; }
+    .pill.clickable:hover { opacity: 0.85; transform: scale(1.03); }
+    .pill.selected {
+      background: var(--pri); color: var(--pri-fg);
+      box-shadow: 0 2px 8px rgba(155,27,52,0.3);
+      transform: scale(1.05);
+    }
+    .pill-count {
+      font-size: 0.8em; font-weight: 700;
+      padding: 1px 6px; border-radius: 10px;
+      background: var(--pill-count-bg);
+    }
+    .pill.selected .pill-count { background: rgba(255,255,255,0.2); }
+
+    /* ============================================================
+       GLOSSARY (Step 3)
+       ============================================================ */
+    .glossary-empty { text-align: center; padding: 48px 16px; }
+    .glossary-empty svg { opacity: 0.2; margin-bottom: 16px; }
+    .glossary-word { font-size: 32px; font-weight: 700; color: var(--pri); text-transform: capitalize; text-align: center; }
+    .glossary-count { font-size: 13px; color: var(--fg2); text-align: center; margin-top: 4px; }
+    .glossary-def { background: var(--sec); border-radius: 8px; padding: 16px; margin-top: 20px; }
+    .glossary-def h4 { font-weight: 600; margin-bottom: 8px; font-size: 14px; }
+    .glossary-def p { font-size: 14.5px; line-height: 1.75; }
+    .glossary-verse {
+      border-left: 4px solid var(--pri);
+      background: var(--quote-bg);
+      border-radius: 0 8px 8px 0;
+      padding: 16px; margin-top: 20px;
+    }
+    .glossary-verse p { font-size: 14.5px; line-height: 1.7; font-style: italic; }
+    .glossary-verse .ref { font-size: 13px; font-weight: 600; color: var(--pri); margin-top: 8px; font-style: normal; }
+    .glossary-cat {
+      border: 1px solid var(--bor); border-radius: 10px;
+      overflow: hidden; margin-top: 20px;
+    }
+    .glossary-cat-header { padding: 20px 16px; border-bottom: 1px solid var(--bor); }
+    .glossary-cat-header .label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--fg2); margin-bottom: 4px; }
+    .glossary-cat-header h4 { font-size: 20px; font-weight: 700; }
+    .glossary-cat-body { padding: 16px; }
+    .glossary-cat-body p { font-size: 14px; line-height: 1.75; }
+    .glossary-cat-body .src { font-size: 12px; color: var(--fg2); font-style: italic; margin-top: 12px; }
+
+    /* ============================================================
+       VISUAL OVERVIEW (Step 4)
+       ============================================================ */
+    .visual-frame {
+      width: 100%; border-radius: 8px; overflow: hidden;
+      background: var(--img-bg); border: 1px solid var(--bor);
+    }
+    .visual-frame img {
+      width: 100%; height: auto; display: block;
+    }
+    .visual-placeholder {
+      padding: 40px 20px; text-align: center;
+    }
+    .visual-desc { font-size: 13px; color: var(--fg2); text-align: center; font-style: italic; margin-top: 12px; }
+
+    /* ============================================================
+       COMMENTARY (Step 5)
+       ============================================================ */
+    .cmt-section {
+      border: 1px solid var(--bor); border-radius: 8px;
+      overflow: hidden; margin-bottom: 8px;
+    }
+    .cmt-toggle {
+      width: 100%; display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 16px; background: none; border: none;
+      color: var(--fg); font-weight: 500; font-size: 14px; text-align: left;
+    }
+    .cmt-toggle svg { color: var(--fg2); flex-shrink: 0; }
+    .cmt-content {
+      padding: 0 16px 16px; border-top: 1px solid var(--bor);
+      background: var(--cmt-bg); display: none;
+      max-height: 450px; overflow-y: auto;
+    }
+    .cmt-content.open { display: block; }
+    .cmt-content::-webkit-scrollbar { width: 14px; }
+    .cmt-content::-webkit-scrollbar-track { background: transparent; }
+    .cmt-content::-webkit-scrollbar-thumb { background: var(--bor); border-radius: 4px; }
+    .cmt-content::-webkit-scrollbar-thumb:hover { background: var(--fg2); }
+    .cmt-content p { font-size: 14.5px; line-height: 1.8; margin-top: 12px; }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .footer {
+      border-top: 1px solid var(--bor);
+      background: var(--card);
+      margin-top: 48px; padding: 32px 16px;
+    }
+    .footer-inner { max-width: 768px; margin: 0 auto; text-align: center; }
+    .footer-divider { width: 60px; height: 1px; background: var(--bor); margin: 16px auto; }
+
+    /* ============================================================
+       SVG ICONS (inline)
+       ============================================================ */
+    .icon { width: 18px; height: 18px; vertical-align: middle; }
+    .icon-sm { width: 16px; height: 16px; }
+
+    /* ============================================================
+       SPLASH SCREEN
+       ============================================================ */
+    #splash {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #0d0d0d;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 1;
+      transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #splash.hiding { opacity: 0; pointer-events: none; }
+    #splash-img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      opacity: 0;
+      transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #splash-img.visible { opacity: 1; }
+
+    /* ============================================================
+       ANIMATIONS
+       ============================================================ */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.93); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-16px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 2px 8px rgba(155,27,52,0.3); }
+      50%       { box-shadow: 0 4px 20px rgba(155,27,52,0.55); }
+    }
+
+    /* Header fades down */
+    .header { animation: fadeInDown 0.5s ease both; }
+
+    /* Prayer banner fades in */
+    .prayer { animation: fadeIn 0.5s ease 0.15s both; }
+
+    /* Selector scales in */
+    .selector { animation: scaleIn 0.45s ease 0.2s both; }
+
+    /* Cards stagger up */
+    .card { animation: fadeInUp 0.45s ease both; }
+    .card:nth-child(1) { animation-delay: 0.30s; }
+    .card:nth-child(2) { animation-delay: 0.38s; }
+    .card:nth-child(3) { animation-delay: 0.46s; }
+    .card:nth-child(4) { animation-delay: 0.54s; }
+    .card:nth-child(5) { animation-delay: 0.62s; }
+
+    /* Verse rows fade in (JS also sets animation-delay per row) */
+    .verse-row { animation: fadeIn 0.3s ease both; }
+
+    /* Chapter divider slides in */
+    .chapter-divider { animation: fadeIn 0.3s ease both; }
+
+    /* Pills pop in with scaleIn */
+    .pill { animation: scaleIn 0.2s ease both; }
+
+    /* Selected pill pulses */
+    .pill.selected { animation: pulseGlow 2s ease-in-out infinite; }
+
+    /* Glossary body fades in on update */
+    .glossary-word { animation: fadeInUp 0.3s ease both; }
+
+    /* Expand content slides down */
+    .expand-content.open { animation: fadeInUp 0.25s ease both; }
+
+    /* Commentary sections */
+    .cmt-content.open { animation: fadeInUp 0.25s ease both; }
+
+    /* Tab active indicator */
+    .tab-btn { transition: background 0.2s, color 0.2s, box-shadow 0.2s; }
+
+    /* Selector dropdowns */
+    .selector-group select { transition: border-color 0.2s, box-shadow 0.2s; }
+    .selector-group select:focus {
+      outline: none;
+      border-color: var(--pri);
+      box-shadow: 0 0 0 3px rgba(155,27,52,0.15);
+    }
+
+    /* Visual frame image */
+    .visual-frame img { transition: opacity 0.4s ease; }
+
+    /* Word highlight in Context View */
+    .word-highlight {
+      background: rgba(155, 27, 52, 0.13);
+      color: var(--pri);
+      font-weight: 700;
+      border-radius: 3px;
+      padding: 0 3px;
+      text-decoration: underline;
+      text-decoration-color: var(--pri);
+      text-underline-offset: 2px;
+    }
+    .dark .word-highlight {
+      background: rgba(155, 27, 52, 0.28);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SPLASH SCREEN -->
+  <div id="splash">
+    <img id="splash-img" src="" alt="D-Groups Bible Study App">
+  </div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo-d">
+        <img src="./images/logos/DGroupLogo.png" alt="D-Groups">
+      </div>
+      <div class="header-center">
+        <div class="header-title">D-Groups Bible Study App</div>
+        <div class="header-sub">1st Peter WEB, Bible Version</div>
+      </div>
+      <div class="header-right">
+        <button class="theme-btn" id="themeToggle" onclick="toggleDark()">
+          <span id="themeIcon">&#9790;</span>
+          <span id="themeText" style="font-size: 14px; font-weight: 500;">Dark Theme</span>
+        </button>
+        <img src="./images/logos/logo-light.png" alt="EIC" class="eic-logo" id="eicLogo">
+      </div>
+    </div>
+  </header>
+
+  <!-- PRAYER BANNER -->
+  <div class="prayer">
+    <img src="./images/icons/prayingicon-redcolor.png" alt="" class="icon" id="icon-prayer-start">
+    <p>Start your bible study by praying as you ask God for direction...</p>
+  </div>
+
+  <!-- PASSAGE SELECTOR -->
+  <div class="selector">
+    <div class="selector-inner">
+      <h2>Select Passage</h2>
+      <div class="selector-controls">
+        <div class="selector-group">
+          <label>Chapter:</label>
+          <select id="chapterSelect" onchange="onChapterChange()">
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            <option value="4">4</option><option value="5">5</option>
+          </select>
+        </div>
+        <div class="selector-group">
+          <label>Verse:</label>
+          <select id="verseSelect" onchange="onVerseChange()"></select>
+        </div>
+      </div>
+      <p class="selector-ref" id="selectorRef">1 Peter 1:1</p>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+
+    <!-- STEP 1: CONTEXT VIEW -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">
+          <img src="./images/icons/contextviewicon-redcolor.png" alt="" class="icon" id="icon-context">
+          Step 1: Context View
+        </div>
+        <p class="card-sub">See your selected verse in context with surrounding verses</p>
+      </div>
+      <div class="card-body">
+        <div id="contextView"></div>
+        <button class="expand-trigger" onclick="toggleExpand('ctx')">
+          <span style="display: flex; align-items: center; gap: 6px;">
+            <img src="./images/icons/bubblethoughticon-redcolor.png" alt="" class="icon" id="icon-bubble-ctx">
+            Why Does Context Matter?
+          </span>
+          <span id="ctx-arrow">&#9660;</span>
+        </button>
+        <div class="expand-content" id="ctx">
+          Every verse in the Bible lives inside a conversation. When you pull a verse out of that conversation, you risk changing what it actually means. Think of it like walking into a room where two people are talking and you only hear one sentence. You might think they are arguing when they are actually joking. You might think they are sad when they are actually celebrating. That one sentence only makes sense when you hear what came before it and what comes after it.
+          <br><br>
+          This section shows you the verses that surround the one you selected. The verse you are studying appears highlighted in the center, and you can see what Peter was saying right before and right after. Read the context first. Then study the verse. That is how you let the Bible speak for itself.
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: REPEATED WORDS -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">
+          <img src="./images/icons/repetitionicon-redcolor.png" alt="" class="icon" id="icon-repeat">
+          Step 2: Repeated Words
+        </div>
+        <p class="card-sub" id="wordsSubtitle">Discover key themes in Chapter 1</p>
+      </div>
+      <div class="card-body">
+        <div class="tabs">
+          <button class="tab-btn active" onclick="setTab('kw')" id="tab-kw">Key Words (0)</button>
+          <button class="tab-btn" onclick="setTab('av')" id="tab-av">Verbs (0)</button>
+          <button class="tab-btn" onclick="setTab('pr')" id="tab-pr">Pronouns (0)</button>
+        </div>
+        <p id="wordsHint" style="font-size:12px;color:var(--fg2);text-align:center;margin-bottom:12px">Click a word to see its definition below</p>
+        <div class="pills" id="pillsContainer"></div>
+        <button class="expand-trigger" onclick="toggleExpand('rep')">
+          <span style="display: flex; align-items: center; gap: 6px;">
+            <img src="./images/icons/bubblethoughticon-redcolor.png" alt="" class="icon" id="icon-bubble-rep">
+            The Insight in Repetition
+          </span>
+          <span id="rep-arrow">&#9660;</span>
+        </button>
+        <div class="expand-content" id="rep">
+          When you read the Bible, one of the most powerful things you can do is notice what the author repeats. If someone says something once, it might be important. If they say it three or four times, they are driving a point home. The words and themes that appear again and again are the ones the writer wants you to pay attention to.
+          <br><br>
+          Click on a key word to see its definition and understand why Peter keeps coming back to it.
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: GLOSSARY -->
+    <div class="card" id="glossaryCard">
+      <div class="card-head">
+        <div class="card-title">
+          <img src="./images/icons/glossaryoftermsicon-redcolor.png" alt="" class="icon" id="icon-glossary">
+          Step 3: Glossary of Terms
+        </div>
+        <p class="card-sub" id="glossarySub">Click a key word above to see its definition</p>
+      </div>
+      <div class="card-body">
+        <div id="glossaryBody"></div>
+        <button class="expand-trigger" onclick="toggleExpand('glo')">
+          <span style="display: flex; align-items: center; gap: 6px;">
+            <img src="./images/icons/bubblethoughticon-redcolor.png" alt="" class="icon" id="icon-bubble-glo">
+            The Bigger Picture
+          </span>
+          <span id="glo-arrow">&#9660;</span>
+        </button>
+        <div class="expand-content" id="glo">
+          When you read a letter for the first time, every sentence feels like its own idea. But when you read it again, and then again, you start to notice that the writer keeps circling back to the same big topics. That is exactly what happens with Peter. He is not jumping from one random thought to the next. He is building something. Every word he chooses connects to a larger theme, and those themes hold the entire letter together like the pillars of a building.
+          <br><br>
+          We have organized the 52 key words of this letter into four major categories. Each one comes directly from Peter's own language. "The Living God" gathers every word that reveals who God is. "The Precious Blood" gathers the words that describe what God has done to save us. "The Royal Priesthood" gathers the words that define who we are now because of that salvation. And "The Fiery Trial" gathers the words that describe the road we walk as believers in a world that does not always understand us.
+          <br><br>
+          Why does this matter? Because when you see that a word like "grace" belongs to the same family as "mercy," "salvation," and "blood," you stop reading isolated definitions and you start seeing the whole story. The Gospel is not a collection of scattered ideas. It is one message, with one Author, pointing to one Savior. These categories are simply a way to help you see that message more clearly.
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4: VISUAL OVERVIEW -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">
+          <img src="./images/icons/visualoverviewbychaptericon-redcolor.png" alt="" class="icon" id="icon-visual">
+          Step 4: Visual Overview
+        </div>
+        <p class="card-sub" id="visualSub">Chapter 1: The Scattered Elect</p>
+      </div>
+      <div class="card-body">
+        <div class="visual-frame">
+          <img id="chapterImg" src="" alt="Chapter illustration">
+        </div>
+        <p class="visual-desc" id="visualDesc"></p>
+      </div>
+    </div>
+
+    <!-- STEP 5: COMMENTARY -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">
+          <img src="./images/icons/commentarybychaptericon-redcolor.png" alt="" class="icon" id="icon-cmt">
+          Step 5: Commentary
+        </div>
+        <p class="card-sub" id="cmtSub">Chapter 1</p>
+      </div>
+      <div class="card-body" id="cmtBody"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="prayer" style="border: none; background: transparent; padding: 0; margin-bottom: 24px;">
+        <img src="./images/icons/prayingicon-redcolor.png" alt="" class="icon" id="icon-prayer-end">
+        <p>End your bible study by praying and applying into your heart...</p>
+      </div>
+      <div class="footer-divider"></div>
+      <p style="font-size:13px;font-weight:500;color:var(--fg2)">D-Groups Bible Study App</p>
+      <p style="font-size:12px;color:var(--fg2)">Emmanuel International Church</p>
+      <p style="font-size:11px;color:var(--fg2);opacity:0.6;margin-top:8px">&#169; 2026 EIC Rueil-Malmaison. All rights reserved. Content carefully reviewed and curated by the Pastoral Team at EIC Paris. - Design and development by the EIC Graphic Department for Emmanuel International Church, Rueil-Malmaison.</p>
+    </div>
+  </footer>
+
+  <!-- DATA -->
+  <script src="./data/app-data.js"></script>
+
+  <!-- APP LOGIC -->
+  <script>
+    // ============================================================
+    // STATE
+    // ============================================================
+    let state = {
+      ch: 1,
+      vs: 1,
+      tab: "kw",
+      selWord: null,
+      isDark: false,
+      expanded: {}
+    };
+
+    // ============================================================
+    // DARK MODE
+    // ============================================================
+    function toggleDark() {
+      state.isDark = !state.isDark;
+      document.body.classList.toggle("dark", state.isDark);
+      document.getElementById("themeIcon").innerHTML = state.isDark ? "&#9788;" : "&#9790;";
+      document.getElementById("themeText").innerHTML = state.isDark ? "Light Theme" : "Dark Theme";
+
+      // Swap icon colors
+      const icons = {
+        "icon-context": ["contextviewicon", 20],
+        "icon-repeat": ["repetitionicon", 20],
+        "icon-glossary": ["glossaryoftermsicon", 20],
+        "icon-visual": ["visualoverviewbychaptericon", 20],
+        "icon-cmt": ["commentarybychaptericon", 20],
+        "icon-bubble-ctx": ["bubblethoughticon", 20],
+        "icon-bubble-rep": ["bubblethoughticon", 20],
+        "icon-bubble-glo": ["bubblethoughticon", 20],
+        "icon-bubble-dis": ["bubblethoughticon", 20],
+        "icon-prayer-start": ["prayingicon", 24],
+        "icon-prayer-end": ["prayingicon", 24]
+      };
+      for (const [id, [name]] of Object.entries(icons)) {
+        const el = document.getElementById(id);
+        if (el) el.src = "./images/icons/" + name + "-redcolor.png";
+      }
+
+      // Swap EIC logo
+      document.getElementById("eicLogo").src = state.isDark
+        ? "./images/logos/logo-dark.png"
+        : "./images/logos/logo-light.png";
+
+      // Update chapter image
+      updateVisual();
+    }
+
+    // ============================================================
+    // CHAPTER / VERSE CHANGE
+    // ============================================================
+    function onChapterChange() {
+      state.ch = parseInt(document.getElementById("chapterSelect").value);
+      state.vs = 1;
+      state.selWord = null;
+      populateVerses();
+      renderAll();
+    }
+
+    function onVerseChange() {
+      state.vs = parseInt(document.getElementById("verseSelect").value);
+      state.selWord = null;
+      renderAll();
+    }
+
+    function onVerseClick(ch, vs) {
+      if (ch === state.ch && vs === state.vs) return;
+      const chChanged = ch !== state.ch;
+      state.ch = ch;
+      state.vs = vs;
+      state.selWord = null;
+      if (chChanged) {
+        document.getElementById("chapterSelect").value = ch;
+        populateVerses();
+      } else {
+        document.getElementById("verseSelect").value = vs;
+      }
+      renderAll();
+      document.querySelector(".selector").scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function populateVerses() {
+      const sel = document.getElementById("verseSelect");
+      const max = VC[state.ch] || 25;
+      sel.innerHTML = "";
+      for (let i = 1; i <= max; i++) {
+        const opt = document.createElement("option");
+        opt.value = i; opt.textContent = i;
+        sel.appendChild(opt);
+      }
+      sel.value = state.vs;
+    }
+
+    // ============================================================
+    // EXPANDABLE SECTIONS
+    // ============================================================
+    function toggleExpand(id) {
+      state.expanded[id] = !state.expanded[id];
+      const el = document.getElementById(id);
+      const arrow = document.getElementById(id + "-arrow");
+      el.classList.toggle("open", state.expanded[id]);
+      if (arrow) arrow.innerHTML = state.expanded[id] ? "&#9650;" : "&#9660;";
+    }
+
+    // ============================================================
+    // TABS
+    // ============================================================
+    function setTab(tab) {
+      state.tab = tab;
+      state.selWord = null;
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById("tab-" + tab).classList.add("active");
+      const hints = {
+        kw: "Click a word to see its definition and highlight it above",
+        av: "Click a word to highlight it in the Context View above",
+        pr: "Click a word to highlight it in the Context View above"
+      };
+      const hint = document.getElementById("wordsHint");
+      hint.textContent = hints[tab] || "";
+      hint.style.display = "block";
+      renderPills();
+      renderGlossary();
+      renderContext();
+    }
+
+    // ============================================================
+    // WORD CLICK
+    // ============================================================
+    function onWordClick(word) {
+      if (state.selWord === word) {
+        state.selWord = null;
+      } else {
+        state.selWord = word;
+      }
+      renderPills();
+      renderGlossary();
+      renderContext();
+      // Scroll to glossary only for keywords (which have definitions)
+      if (state.selWord && state.tab === "kw") {
+        document.getElementById("glossaryCard").scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }
+
+    // ============================================================
+    // RENDER: Context View
+    // ============================================================
+    function renderContext() {
+      // Build a flat list of {ch, vs, txt} entries spanning ±3 verses across chapter boundaries
+      const entries = [];
+      let needed = state.vs - 3;  // relative offset from selected verse
+      let scanCh = state.ch;
+      let scanVs = state.vs - 3;
+
+      // Walk backwards to find the true starting point
+      while (scanVs < 1 && scanCh > 1) {
+        scanCh--;
+        scanVs = VC[scanCh] + scanVs; // e.g. vs=-2 → last 2 verses of prev chapter
+      }
+      scanVs = Math.max(1, scanVs);
+
+      // Collect up to 7 verses (3 before + selected + 3 after)
+      let collected = 0;
+      let curCh = scanCh;
+      let curVs = scanVs;
+      while (collected < 7) {
+        const maxVs = VC[curCh] || 25;
+        if (curVs > maxVs) {
+          if (curCh >= 5) break;
+          curCh++;
+          curVs = 1;
+          continue;
+        }
+        const txt = (BIBLE[String(curCh)] || {})[String(curVs)];
+        if (txt) entries.push({ ch: curCh, vs: curVs, txt });
+        curVs++;
+        collected++;
+      }
+
+      let html = "";
+      let prevChInList = null;
+      entries.forEach((e, idx) => {
+        const isSel = e.ch === state.ch && e.vs === state.vs;
+        const distVs = (e.ch - state.ch) * 100 + (e.vs - state.vs); // rough signed distance
+        const dist = Math.abs(e.vs - state.vs) + Math.abs(e.ch - state.ch) * 3;
+        const opacity = isSel ? 1 : Math.max(0.4, 1 - dist * 0.2);
+        const fontSize = isSel ? 15.5 : Math.max(13.5, 15 - dist * 0.5);
+        const delay = (idx * 0.05).toFixed(2);
+
+        // Chapter divider between chapters
+        if (prevChInList !== null && e.ch !== prevChInList) {
+          html += '<div class="chapter-divider">';
+          html += '<div class="chapter-divider-line"></div>';
+          html += '<span class="chapter-divider-label">Chapter ' + e.ch + '</span>';
+          html += '<div class="chapter-divider-line"></div>';
+          html += '</div>';
+        }
+        prevChInList = e.ch;
+
+        html += '<div class="verse-row' + (isSel ? ' selected' : '') + '" onclick="onVerseClick(' + e.ch + ',' + e.vs + ')" style="opacity:' + opacity + ';font-size:' + fontSize + 'px;animation-delay:' + delay + 's;animation-fill-mode:backwards;cursor:pointer">';
+        html += '<span class="verse-num">' + e.vs + '</span>' + highlightWord(e.txt, state.selWord);
+        html += '</div>';
+      });
+
+      document.getElementById("contextView").innerHTML = html;
+      document.getElementById("selectorRef").textContent = "1 Peter " + state.ch + ":" + state.vs;
+    }
+
+    // ============================================================
+    // RENDER: Pills
+    // ============================================================
+    function getWordsForTab() {
+      const list = RW[state.tab] || [];
+      return list
+        .map(w => ({ w: w.w, cc: w.c[String(state.ch)] || 0, t: w.t }))
+        .filter(w => w.cc > 0)
+        .sort((a, b) => b.cc - a.cc);
+    }
+
+    function renderPills() {
+      const words = getWordsForTab();
+      const container = document.getElementById("pillsContainer");
+      const isKW = state.tab === "kw";
+
+      // Update tab counts
+      ["kw", "av", "pr"].forEach(k => {
+        const list = RW[k] || [];
+        const count = list.filter(w => (w.c[String(state.ch)] || 0) > 0).length;
+        const labels = { kw: "Key Words", av: "Verbs", pr: "Pronouns" };
+        document.getElementById("tab-" + k).textContent = labels[k] + " (" + count + ")";
+      });
+
+      document.getElementById("wordsSubtitle").textContent = "Discover key themes in Chapter " + state.ch;
+
+      if (words.length === 0) {
+        container.innerHTML = '<p style="font-size:13px;color:var(--fg2);font-style:italic;padding:16px">No words in this category for Chapter ' + state.ch + '.</p>';
+        return;
+      }
+
+      const maxC = Math.max(1, ...words.map(w => w.cc));
+      const minC = Math.min(Infinity, ...words.map(w => w.cc));
+      let html = "";
+      words.forEach((w, idx) => {
+        const isSel = state.selWord === w.w;
+        let sz, pd;
+        if (maxC === minC && words.length > 1) { // All words have the same count
+          sz = 14; pd = "6px 12px";
+        } else {
+          const ratio = w.cc / maxC;
+          if (ratio >= 0.9) {
+            sz = 21; pd = "10px 20px"; // xtra large
+          } else if (ratio >= 0.6) {
+            sz = 18; pd = "8px 16px"; // large
+          } else if (ratio >= 0.3) {
+            sz = 15; pd = "6px 12px"; // mid-small
+          } else {
+            sz = 12; pd = "5px 10px"; // small
+          }
+        }
+        const cls = "pill clickable" + (isSel ? " selected" : "");
+        const safeWord = w.w.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        const animDelay = (idx * 0.03).toFixed(2);
+        html += '<button class="' + cls + '" style="font-size:' + sz + 'px;padding:' + pd + ';animation:fadeIn 0.25s ease both;animation-delay:' + animDelay + 's" onclick="onWordClick(\'' + safeWord + '\')">';
+        html += escHtml(w.w) + '<span class="pill-count">' + w.cc + '</span>';
+        html += '</button>';
+      });
+      container.innerHTML = html;
+    }
+
+    // ============================================================
+    // RENDER: Glossary
+    // ============================================================
+    function renderGlossary() {
+      const body = document.getElementById("glossaryBody");
+      const sub = document.getElementById("glossarySub");
+
+      if (!state.selWord) {
+        sub.textContent = "Click a key word above to see its definition";
+        body.innerHTML = '<div class="glossary-empty"><p style="color:var(--fg2)">Select a key word from Step 2 to see its definition here.</p><p style="font-size:13px;color:var(--fg2);opacity:0.6;margin-top:8px">Peter uses 52 key words throughout his letter. Each one reveals something important about the Gospel.</p></div>';
+        return;
+      }
+
+      const entry = GL.find(g => g.w.toLowerCase() === state.selWord.toLowerCase());
+      if (!entry) {
+        sub.textContent = "Word not found in glossary";
+        body.innerHTML = '<p style="color:var(--fg2);text-align:center;padding:32px">This word is not in the Key Words glossary. Only the 52 main theological keywords have definitions.</p>';
+        return;
+      }
+
+      sub.textContent = 'Selected: ' + entry.w;
+      const cat = CATS[entry.ck];
+      const catColor = CAC[entry.ck] || "#9B1B34";
+
+      // Category image
+      const catImgNames = {
+        the_living_god: "Glossary01-TheLivingGod",
+        the_precious_blood: "Glossary02-ThePreciousBlood",
+        the_royal_priesthood: "Glossary03-TheRoyalPriesthood",
+        the_fiery_trial: "Glossary04-TheFieryTrial"
+      };
+      const catImgBase = catImgNames[entry.ck] || "";
+      const catImgSrc = catImgBase ? "./images/categories/" + catImgBase + ".png" : "";
+
+      let html = '';
+      html += '<div class="glossary-word">' + escHtml(entry.w) + '</div>';
+      html += '<p class="glossary-count">Appears ' + entry.n + ' times in 1 Peter</p>';
+      html += '<div class="glossary-def"><h4>Definition</h4><p>' + escHtml(entry.d) + '</p></div>';
+      html += '<div class="glossary-verse"><p>' + escHtml(entry.v) + '</p><p class="ref">' + escHtml(entry.r) + '</p></div>';
+
+      if (cat) {
+        html += '<div class="glossary-cat">';
+        if (catImgSrc) {
+          html += '<div style="position:relative;overflow:hidden;max-height:160px">';
+          html += '<img src="' + catImgSrc + '" alt="' + escHtml(cat.label) + '" style="width:100%;display:block">';
+          html += '<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.6),transparent)"></div>';
+          html += '<div style="position:absolute;bottom:0;left:0;right:0;padding:16px">';
+          html += '<p style="font-size:10px;color:rgba(255,255,255,0.8);text-transform:uppercase;letter-spacing:1.5px">Category</p>';
+          html += '<h4 style="font-size:18px;font-weight:700;color:#fff">' + escHtml(cat.label) + '</h4>';
+          html += '</div></div>';
+        } else {
+          html += '<div class="glossary-cat-header" style="background:' + catColor + '15">';
+          html += '<p class="label">Category</p>';
+          html += '<h4 style="color:' + catColor + '">' + escHtml(cat.label) + '</h4>';
+          html += '</div>';
+        }
+        html += '<div class="glossary-cat-body">';
+        html += '<p>' + escHtml(cat.desc) + '</p>';
+        html += '<p class="src">Source: ' + escHtml(cat.src) + '</p>';
+        html += '</div></div>';
+      }
+
+      body.innerHTML = html;
+    }
+
+    // ============================================================
+    // RENDER: Visual Overview
+    // ============================================================
+    function updateVisual() {
+      const info = CD[state.ch];
+      document.getElementById("visualSub").textContent = "Chapter " + state.ch + ": " + (info ? info.t : "");
+      document.getElementById("visualDesc").textContent = info ? info.d : "";
+
+      const img = document.getElementById("chapterImg");
+      img.src = "./images/chapters/1peterchapter" + state.ch + "Final.png";
+      img.alt = "1 Peter Chapter " + state.ch;
+    }
+
+    // ============================================================
+    // RENDER: Commentary
+    // ============================================================
+    function renderCommentary() {
+      const cm = CM[String(state.ch)];
+      const body = document.getElementById("cmtBody");
+      document.getElementById("cmtSub").textContent = "Chapter " + state.ch + ": " + (cm ? cm.title : "");
+
+      if (!cm) {
+        body.innerHTML = '<p style="color:var(--fg2);text-align:center;padding:32px">Commentary coming soon.</p>';
+        return;
+      }
+
+      let html = "";
+      cm.sections.forEach((s, i) => {
+        const isOpen = i === 0;
+        html += '<div class="cmt-section">';
+        html += '<button class="cmt-toggle" onclick="toggleCmt(' + i + ')">';
+        html += '<span>' + escHtml(s.t) + '</span>';
+        html += '<span class="cmt-arrow" id="cmt-arrow-' + i + '">' + (isOpen ? '&#9650;' : '&#9660;') + '</span>';
+        html += '</button>';
+        html += '<div class="cmt-content' + (isOpen ? ' open' : '') + '" id="cmt-' + i + '">';
+        const paras = s.c.split("\n\n");
+        paras.forEach(p => {
+          if (p.trim()) html += '<p>' + escHtml(p) + '</p>';
+        });
+        html += '</div></div>';
+      });
+
+      // Disclaimer
+      html += '<button class="expand-trigger" onclick="toggleExpand(\'dis\')">';
+      html += '<span style="display: flex; align-items: center; gap: 6px;">';
+      html += '<img src="./images/icons/bubblethoughticon-redcolor.png" alt="" class="icon" id="icon-bubble-dis">';
+      html += 'About This Commentary</span>';
+      html += '<span id="dis-arrow">&#9660;</span>';
+      html += '</button>';
+      html += '<div class="expand-content" id="dis">' + escHtml(DIS) + '</div>';
+
+      body.innerHTML = html;
+    }
+
+    function toggleCmt(i) {
+      const el = document.getElementById("cmt-" + i);
+      const arrow = document.getElementById("cmt-arrow-" + i);
+      const isOpen = el.classList.contains("open");
+      el.classList.toggle("open", !isOpen);
+      if (arrow) arrow.innerHTML = !isOpen ? "&#9650;" : "&#9660;";
+    }
+
+    // ============================================================
+    // UTILITY
+    // ============================================================
+    function escHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // Wraps every whole-word occurrence of `word` in verse text with a highlight span.
+    function highlightWord(txt, word) {
+      if (!word) return escHtml(txt);
+      const safeWord = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp('\\b' + safeWord + '\\b', 'gi');
+      let result = '';
+      let last = 0;
+      let match;
+      while ((match = regex.exec(txt)) !== null) {
+        result += escHtml(txt.slice(last, match.index));
+        result += '<mark class="word-highlight">' + escHtml(match[0]) + '</mark>';
+        last = match.index + match[0].length;
+      }
+      result += escHtml(txt.slice(last));
+      return result;
+    }
+
+    // ============================================================
+    // RENDER ALL
+    // ============================================================
+    function renderAll() {
+      renderContext();
+      renderPills();
+      renderGlossary();
+      updateVisual();
+      renderCommentary();
+    }
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    populateVerses();
+    renderAll();
+
+    // ============================================================
+    // SPLASH SCREEN
+    // ============================================================
+    (function () {
+      const splash = document.getElementById("splash");
+      const img    = document.getElementById("splash-img");
+
+      // Pick the right image based on screen width
+      // Mobile  : < 768 px
+      // Tablet  : 768 px – 1199 px
+      // PC      : ≥ 1200 px
+      var w = window.screen.width;
+      if (w >= 1200) {
+        img.src = "./images/logos/pcsplashimage.png";
+      } else if (w >= 768) {
+        img.src = "./images/logos/tabletsplashimage.png";
+      } else {
+        img.src = "./images/logos/mobilesplashimage.png";
+      }
+
+      // Fade the image in once it has loaded
+      function showSplash() {
+        img.classList.add("visible");           // image fades in over 1.2 s
+        setTimeout(function () {
+          splash.classList.add("hiding");        // overlay fades out over 1 s
+          setTimeout(function () {
+            splash.style.display = "none";       // fully remove from layout
+          }, 1050);
+        }, 2200);                                // total visible time ~2.2 s
+      }
+
+      if (img.complete && img.naturalWidth > 0) {
+        showSplash();
+      } else {
+        img.addEventListener("load",  showSplash);
+        img.addEventListener("error", function () { splash.style.display = "none"; });
+      }
+    })();
+  </script>
+
+</body>
+</html>
